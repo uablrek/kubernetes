@@ -1602,8 +1602,10 @@ func (PodExecOptions) SwaggerDoc() map[string]string {
 }
 
 var map_PodIP = map[string]string{
-	"":   "PodIP represents a single IP address allocated to the pod.",
-	"ip": "IP is the IP address assigned to the pod",
+	"":              "PodIP represents a single IP address allocated to the pod.",
+	"ip":            "IP is the IP address assigned to the pod",
+	"podNetwork":    "PodNetworkName is name of the PodNetwork the IP belongs to",
+	"interfaceName": "InterfaceName is name of the network interface used for this attachment",
 }
 
 func (PodIP) SwaggerDoc() map[string]string {
@@ -1787,6 +1789,7 @@ var map_PodStatus = map[string]string{
 	"hostIPs":                    "hostIPs holds the IP addresses allocated to the host. If this field is specified, the first entry must match the hostIP field. This list is empty if the pod has not started yet. A pod can be assigned to a node that has a problem in kubelet which in turns means that HostIPs will not be updated even if there is a node is assigned to this pod.",
 	"podIP":                      "podIP address allocated to the pod. Routable at least within the cluster. Empty if not yet allocated.",
 	"podIPs":                     "podIPs holds the IP addresses allocated to the pod. If this field is specified, the 0th entry must match the podIP field. Pods may be allocated at most 1 value for each of IPv4 and IPv6. This list is empty if no IPs have been allocated yet.",
+	"additionalPodIPs":           "additionalPodIPs holds the IP additional addresses allocated to the pod. The addresses in podIPs are not included in this list",
 	"startTime":                  "RFC 3339 date and time at which the object was acknowledged by the Kubelet. This is before the Kubelet pulled the container image(s) for the pod.",
 	"initContainerStatuses":      "The list has one entry per init container in the manifest. The most recent successful init container will have ready = true, the most recently started container will have startTime set. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#pod-and-container-status",
 	"containerStatuses":          "The list has one entry per container in the manifest. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#pod-and-container-status",

@@ -5023,8 +5023,16 @@
       "io.k8s.api.core.v1.PodIP": {
         "description": "PodIP represents a single IP address allocated to the pod.",
         "properties": {
+          "interfaceName": {
+            "description": "InterfaceName is name of the network interface used for this attachment",
+            "type": "string"
+          },
           "ip": {
             "description": "IP is the IP address assigned to the pod",
+            "type": "string"
+          },
+          "podNetwork": {
+            "description": "PodNetworkName is name of the PodNetwork the IP belongs to",
             "type": "string"
           }
         },
@@ -5574,6 +5582,24 @@
       "io.k8s.api.core.v1.PodStatus": {
         "description": "PodStatus represents information about the status of a pod. Status may trail the actual state of a system, especially if the node that hosts the pod cannot contact the control plane.",
         "properties": {
+          "additionalPodIPs": {
+            "description": "additionalPodIPs holds the IP additional addresses allocated to the pod. The addresses in podIPs are not included in this list",
+            "items": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/io.k8s.api.core.v1.PodIP"
+                }
+              ],
+              "default": {}
+            },
+            "type": "array",
+            "x-kubernetes-list-map-keys": [
+              "ip"
+            ],
+            "x-kubernetes-list-type": "map",
+            "x-kubernetes-patch-merge-key": "ip",
+            "x-kubernetes-patch-strategy": "merge"
+          },
           "conditions": {
             "description": "Current service state of pod. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#pod-conditions",
             "items": {

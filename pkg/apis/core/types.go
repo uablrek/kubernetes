@@ -3674,6 +3674,12 @@ type PodDNSConfigOption struct {
 type PodIP struct {
 	// IP is the IP address assigned to the pod
 	IP string
+	// PodNetworkName is name of the PodNetwork the IP belongs to
+	// +optional
+	PodNetworkName *string
+	// InterfaceName is name of the network interface used for this attachment
+	// +optional
+	InterfaceName *string
 }
 
 // HostIP represents a single IP address allocated to the host.
@@ -3847,6 +3853,11 @@ type PodStatus struct {
 	// one value for each of IPv4 and IPv6.
 	// +optional
 	PodIPs []PodIP
+
+	// additionalPodIPs holds the IP additional addresses allocated to the pod. The addresses in podIPs are
+	// not included in this list
+	// +optional
+	AdditionalPodIPs []PodIP
 
 	// Date and time at which the object was acknowledged by the Kubelet.
 	// This is before the Kubelet pulled the container image(s) for the pod.

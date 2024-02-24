@@ -6047,6 +6047,12 @@ func Convert_url_Values_To_v1_PodExecOptions(in *url.Values, out *v1.PodExecOpti
 
 func autoConvert_v1_PodIP_To_core_PodIP(in *v1.PodIP, out *core.PodIP, s conversion.Scope) error {
 	out.IP = in.IP
+	if err := metav1.Convert_string_To_Pointer_string(&in.PodNetworkName, &out.PodNetworkName, s); err != nil {
+		return err
+	}
+	if err := metav1.Convert_string_To_Pointer_string(&in.InterfaceName, &out.InterfaceName, s); err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -6057,6 +6063,12 @@ func Convert_v1_PodIP_To_core_PodIP(in *v1.PodIP, out *core.PodIP, s conversion.
 
 func autoConvert_core_PodIP_To_v1_PodIP(in *core.PodIP, out *v1.PodIP, s conversion.Scope) error {
 	out.IP = in.IP
+	if err := metav1.Convert_Pointer_string_To_string(&in.PodNetworkName, &out.PodNetworkName, s); err != nil {
+		return err
+	}
+	if err := metav1.Convert_Pointer_string_To_string(&in.InterfaceName, &out.InterfaceName, s); err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -6589,7 +6601,28 @@ func autoConvert_v1_PodStatus_To_core_PodStatus(in *v1.PodStatus, out *core.PodS
 	out.HostIP = in.HostIP
 	out.HostIPs = *(*[]core.HostIP)(unsafe.Pointer(&in.HostIPs))
 	// WARNING: in.PodIP requires manual conversion: does not exist in peer-type
-	out.PodIPs = *(*[]core.PodIP)(unsafe.Pointer(&in.PodIPs))
+	if in.PodIPs != nil {
+		in, out := &in.PodIPs, &out.PodIPs
+		*out = make([]core.PodIP, len(*in))
+		for i := range *in {
+			if err := Convert_v1_PodIP_To_core_PodIP(&(*in)[i], &(*out)[i], s); err != nil {
+				return err
+			}
+		}
+	} else {
+		out.PodIPs = nil
+	}
+	if in.AdditionalPodIPs != nil {
+		in, out := &in.AdditionalPodIPs, &out.AdditionalPodIPs
+		*out = make([]core.PodIP, len(*in))
+		for i := range *in {
+			if err := Convert_v1_PodIP_To_core_PodIP(&(*in)[i], &(*out)[i], s); err != nil {
+				return err
+			}
+		}
+	} else {
+		out.AdditionalPodIPs = nil
+	}
 	out.StartTime = (*metav1.Time)(unsafe.Pointer(in.StartTime))
 	out.InitContainerStatuses = *(*[]core.ContainerStatus)(unsafe.Pointer(&in.InitContainerStatuses))
 	out.ContainerStatuses = *(*[]core.ContainerStatus)(unsafe.Pointer(&in.ContainerStatuses))
@@ -6608,7 +6641,28 @@ func autoConvert_core_PodStatus_To_v1_PodStatus(in *core.PodStatus, out *v1.PodS
 	out.NominatedNodeName = in.NominatedNodeName
 	out.HostIP = in.HostIP
 	out.HostIPs = *(*[]v1.HostIP)(unsafe.Pointer(&in.HostIPs))
-	out.PodIPs = *(*[]v1.PodIP)(unsafe.Pointer(&in.PodIPs))
+	if in.PodIPs != nil {
+		in, out := &in.PodIPs, &out.PodIPs
+		*out = make([]v1.PodIP, len(*in))
+		for i := range *in {
+			if err := Convert_core_PodIP_To_v1_PodIP(&(*in)[i], &(*out)[i], s); err != nil {
+				return err
+			}
+		}
+	} else {
+		out.PodIPs = nil
+	}
+	if in.AdditionalPodIPs != nil {
+		in, out := &in.AdditionalPodIPs, &out.AdditionalPodIPs
+		*out = make([]v1.PodIP, len(*in))
+		for i := range *in {
+			if err := Convert_core_PodIP_To_v1_PodIP(&(*in)[i], &(*out)[i], s); err != nil {
+				return err
+			}
+		}
+	} else {
+		out.AdditionalPodIPs = nil
+	}
 	out.StartTime = (*metav1.Time)(unsafe.Pointer(in.StartTime))
 	out.QOSClass = v1.PodQOSClass(in.QOSClass)
 	out.InitContainerStatuses = *(*[]v1.ContainerStatus)(unsafe.Pointer(&in.InitContainerStatuses))

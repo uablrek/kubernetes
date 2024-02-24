@@ -35,6 +35,7 @@ type PodStatusApplyConfiguration struct {
 	HostIPs                    []HostIPApplyConfiguration                 `json:"hostIPs,omitempty"`
 	PodIP                      *string                                    `json:"podIP,omitempty"`
 	PodIPs                     []PodIPApplyConfiguration                  `json:"podIPs,omitempty"`
+	AdditionalPodIPs           []PodIPApplyConfiguration                  `json:"additionalPodIPs,omitempty"`
 	StartTime                  *metav1.Time                               `json:"startTime,omitempty"`
 	InitContainerStatuses      []ContainerStatusApplyConfiguration        `json:"initContainerStatuses,omitempty"`
 	ContainerStatuses          []ContainerStatusApplyConfiguration        `json:"containerStatuses,omitempty"`
@@ -133,6 +134,19 @@ func (b *PodStatusApplyConfiguration) WithPodIPs(values ...*PodIPApplyConfigurat
 			panic("nil value passed to WithPodIPs")
 		}
 		b.PodIPs = append(b.PodIPs, *values[i])
+	}
+	return b
+}
+
+// WithAdditionalPodIPs adds the given value to the AdditionalPodIPs field in the declarative configuration
+// and returns the receiver, so that objects can be build by chaining "With" function invocations.
+// If called multiple times, values provided by each call will be appended to the AdditionalPodIPs field.
+func (b *PodStatusApplyConfiguration) WithAdditionalPodIPs(values ...*PodIPApplyConfiguration) *PodStatusApplyConfiguration {
+	for i := range values {
+		if values[i] == nil {
+			panic("nil value passed to WithAdditionalPodIPs")
+		}
+		b.AdditionalPodIPs = append(b.AdditionalPodIPs, *values[i])
 	}
 	return b
 }

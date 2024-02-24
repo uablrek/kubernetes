@@ -6409,7 +6409,13 @@ var schemaYAML = typed.YAMLObject(`types:
 - name: io.k8s.api.core.v1.PodIP
   map:
     fields:
+    - name: interfaceName
+      type:
+        scalar: string
     - name: ip
+      type:
+        scalar: string
+    - name: podNetwork
       type:
         scalar: string
 - name: io.k8s.api.core.v1.PodOS
@@ -6673,6 +6679,14 @@ var schemaYAML = typed.YAMLObject(`types:
 - name: io.k8s.api.core.v1.PodStatus
   map:
     fields:
+    - name: additionalPodIPs
+      type:
+        list:
+          elementType:
+            namedType: io.k8s.api.core.v1.PodIP
+          elementRelationship: associative
+          keys:
+          - ip
     - name: conditions
       type:
         list:

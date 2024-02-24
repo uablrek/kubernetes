@@ -33,6 +33,10 @@ metadata:
   selfLink: selfLinkValue
   uid: uidValue
 status:
+  additionalPodIPs:
+  - interfaceName: interfaceNameValue
+    ip: ipValue
+    podNetwork: podNetworkValue
   conditions:
   - lastProbeTime: "2003-01-01T01:01:01Z"
     lastTransitionTime: "2004-01-01T01:01:01Z"
@@ -183,7 +187,9 @@ status:
   phase: phaseValue
   podIP: podIPValue
   podIPs:
-  - ip: ipValue
+  - interfaceName: interfaceNameValue
+    ip: ipValue
+    podNetwork: podNetworkValue
   qosClass: qosClassValue
   reason: reasonValue
   resize: resizeValue

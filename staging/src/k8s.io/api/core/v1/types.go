@@ -4248,6 +4248,14 @@ type PodDNSConfigOption struct {
 type PodIP struct {
 	// IP is the IP address assigned to the pod
 	IP string `json:"ip,omitempty" protobuf:"bytes,1,opt,name=ip"`
+
+	// PodNetworkName is name of the PodNetwork the IP belongs to
+	// +optional
+	PodNetworkName string `json:"podNetwork,omitempty" protobuf:"bytes,2,opt,name=podNetwork"`
+
+	// InterfaceName is name of the network interface used for this attachment
+	// +optional
+	InterfaceName string `json:"interfaceName,omitempty" protobuf:"bytes,3,opt,name=interfaceName"`
 }
 
 // HostIP represents a single IP address allocated to the host.
@@ -4524,6 +4532,15 @@ type PodStatus struct {
 	// +listType=map
 	// +listMapKey=ip
 	PodIPs []PodIP `json:"podIPs,omitempty" protobuf:"bytes,12,rep,name=podIPs" patchStrategy:"merge" patchMergeKey:"ip"`
+
+	// additionalPodIPs holds the IP additional addresses allocated to the pod. The addresses in podIPs are
+	// not included in this list
+	// +optional
+	// +patchStrategy=merge
+	// +patchMergeKey=ip
+	// +listType=map
+	// +listMapKey=ip
+	AdditionalPodIPs []PodIP `json:"additionalPodIPs,omitempty" protobuf:"bytes,17,rep,name=additionalPodIPs" patchStrategy:"merge" patchMergeKey:"ip"`
 
 	// RFC 3339 date and time at which the object was acknowledged by the Kubelet.
 	// This is before the Kubelet pulled the container image(s) for the pod.
